@@ -1,0 +1,177 @@
+jobId: "994"
+jobName: Transaction Master
+jobType: Source Aligned Data Product
+developerId: 42825798-b98f-41c3-954a-c0722b747faf
+domain: financial_services
+alias: loading_transaction_master_data_in_iceberg
+discoveryPort:
+  name: Transaction Master
+inputPorts:
+  - alias: Internet_Transactions_1
+    isDynamic: true
+    path: s3://dataverse/testbed/banking/internet_transactions.csv
+    optional:
+      persistDataFrame: false
+      advanceOptions:
+        delimiter: ","
+      enableDataReconciliation: false
+      enforceSchema: false
+      connection: S3 Connection - Financial Services
+      dataSetUrn: urn:dv:dataset:7526d173-7718-438e-ad94-18fe5f913cc0
+    type: inputDelimited
+  - alias: Core_Banking_System_Details_1
+    isDynamic: true
+    path: s3://dataverse/testbed/banking/core_banking_system_details.csv
+    optional:
+      persistDataFrame: false
+      advanceOptions:
+        delimiter: ","
+      enableDataReconciliation: false
+      enforceSchema: false
+      connection: S3 Connection - Financial Services
+      dataSetUrn: urn:dv:dataset:633f7cc0-ced6-4523-95ce-435d799c196a
+    type: inputDelimited
+  - alias: Disbursment_Details_1
+    isDynamic: true
+    path: s3://dataverse/testbed/banking/transaction_master.csv
+    optional:
+      persistDataFrame: false
+      advanceOptions:
+        delimiter: ","
+      enableDataReconciliation: false
+      enforceSchema: false
+      connection: S3 Connection - Financial Services
+      dataSetUrn: urn:dv:dataset:ca3798cd-602a-4b25-be28-17eab75bf5a1
+    type: inputDelimited
+productState:
+  isDynamic: true
+  alias: loading_transaction_master_data_in_iceberg
+  retentionVersions: ""
+  logicalSchema:
+    properties:
+      txn_id:
+        type: STRING
+        description: Unique identifier of the transaction
+        sourceColumn: txn_id
+        sourceTable: internet_transactions
+      account_id:
+        type: STRING
+        description: Unique identifier of the customer account
+        sourceColumn: account_id
+        sourceTable: internet_transactions
+      amount:
+        type: STRING
+        description: Transaction or disbursement amount
+        sourceColumn: amount
+        sourceTable: internet_transactions
+      currency:
+        type: STRING
+        description: Currency code of the transaction
+        sourceColumn: currency
+        sourceTable: internet_transactions
+      timestamp:
+        type: DATETIME
+        description: Transaction timestamp
+        sourceColumn: timestamp
+        sourceTable: internet_transactions
+      channel:
+        type: STRING
+        description: Channel used for the transaction
+        sourceColumn: channel
+        sourceTable: internet_transactions
+      status:
+        type: STRING
+        description: Transaction or account status
+        sourceColumn: status
+        sourceTable: internet_transactions
+      customer_id:
+        type: STRING
+        description: Unique identifier of the customer
+        sourceColumn: customer_id
+        sourceTable: internet_transactions
+      product_code:
+        type: STRING
+        description: Code of the banking product
+        sourceColumn: product_code
+        sourceTable: core_banking_system_details
+      account_decimal(35,10):
+        type: STRING
+        description: Bank account decimal(35,10)
+        sourceColumn: account_decimal(35,10)
+        sourceTable: core_banking_system_details
+      opened_date:
+        type: DATETIME
+        description: Date when the account was opened
+        sourceColumn: opened_date
+        sourceTable: core_banking_system_details
+      interest_rate:
+        type: STRING
+        description: Interest rate applicable to the account
+        sourceColumn: interest_rate
+        sourceTable: core_banking_system_details
+      min_balance:
+        type: STRING
+        description: Minimum balance requirement
+        sourceColumn: min_balance
+        sourceTable: core_banking_system_details
+      overdraft_limit:
+        type: STRING
+        description: Overdraft limit for the account
+        sourceColumn: overdraft_limit
+        sourceTable: core_banking_system_details
+      lien_flag:
+        type: STRING
+        description: Indicates whether lien is marked on the account
+        sourceColumn: lien_flag
+        sourceTable: core_banking_system_details
+      disbursement_id:
+        type: STRING
+        description: Unique identifier for the disbursement
+        sourceColumn: disbursement_id
+        sourceTable: disbursement_details
+      loan_id:
+        type: STRING
+        description: Unique identifier of the loan
+        sourceColumn: loan_id
+        sourceTable: disbursement_details
+      disbursement_date:
+        type: DATETIME
+        description: Date when the disbursement was made
+        sourceColumn: disbursement_date
+        sourceTable: disbursement_details
+      payment_method:
+        type: STRING
+        description: Payment method used for disbursement
+        sourceColumn: payment_method
+        sourceTable: disbursement_details
+  stateStoreType: loadDataIceberg
+  isProfilingEnabled: false
+  updateStrategy: Overwrite
+  tableName: iceberg_meta.transaction_master
+  warehousePath: s3a://dataverse/testbed_load/
+  catalogName: postgres_catalog
+  optional:
+    persistDataFrame: false
+    enableDataReconciliation: false
+    enforceSchema: true
+    enforceSchemaMethod: Warning
+    catalogType: postgres
+  refreshInterval: 30 5 * * *
+transformation:
+  - isDynamic: true
+    alias: Transform
+    description: Transform transaction master data
+    sequence: 4
+    inputDataFrameList:
+      - inputDataFrame: Internet_Transactions_1
+        tempViewName: IT
+      - inputDataFrame: Core_Banking_System_Details_1
+        tempViewName: CBS
+      - inputDataFrame: Disbursment_Details_1
+        tempViewName: DD
+    query: select * from DD
+    optional:
+      persistDataFrame: false
+    type: operationThroughSqlQuery
+controlPort:
+  dataQualityRules: {}
