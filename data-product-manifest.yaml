@@ -1,0 +1,143 @@
+jobId: "993"
+jobName: Secured Loans
+jobType: Source Aligned Data Product
+developerId: 42825798-b98f-41c3-954a-c0722b747faf
+domain: financial_services
+alias: loading_secured_loan_data_in_iceberg
+discoveryPort:
+  name: Secured Loans
+inputPorts:
+  - alias: Party_Master_1
+    isDynamic: true
+    path: s3://dataverse/testbed/banking/secured_loans.csv
+    optional:
+      persistDataFrame: false
+      advanceOptions:
+        delimiter: ","
+      enableDataReconciliation: false
+      enforceSchema: false
+      connection: S3 Connection - Financial Services
+      dataSetUrn: urn:dv:dataset:0948fd25-c3e6-4f66-b7c5-2d8333f21293
+    type: inputDelimited
+  - alias: Loan_Master_1
+    isDynamic: true
+    path: s3://dataverse/testbed/banking/loan_master.csv
+    optional:
+      persistDataFrame: false
+      advanceOptions:
+        delimiter: ","
+      enableDataReconciliation: false
+      enforceSchema: false
+      connection: S3 Connection - Financial Services
+      dataSetUrn: urn:dv:dataset:d300f506-c956-4763-aabb-8dd8b1d706fe
+    type: inputDelimited
+productState:
+  isDynamic: true
+  alias: loading_secured_loan_data_in_iceberg
+  retentionVersions: ""
+  logicalSchema:
+    properties:
+      customer_id:
+        type: STRING
+        description: Unique identifier of the customer
+        sourceColumn: customer_id
+        sourceTable: party_master
+      name:
+        type: STRING
+        description: Full name of the customer
+        sourceColumn: name
+        sourceTable: party_master
+      contact_info:
+        type: STRING
+        description: Contact details of the customer
+        sourceColumn: contact_info
+        sourceTable: party_master
+      credit_score:
+        type: STRING
+        description: Credit score of the customer
+        sourceColumn: credit_score
+        sourceTable: party_master
+      loan_id:
+        type: STRING
+        description: Unique identifier of the loan
+        sourceColumn: loan_id
+        sourceTable: loan_master
+      product:
+        type: STRING
+        description: Loan product type
+        sourceColumn: product
+        sourceTable: loan_master
+      sanction_amount:
+        type: STRING
+        description: Sanctioned loan amount
+        sourceColumn: sanction_amount
+        sourceTable: loan_master
+      disbursed_amount:
+        type: STRING
+        description: Disbursed loan amount
+        sourceColumn: disbursed_amount
+        sourceTable: loan_master
+      rate_type:
+        type: STRING
+        description: Interest rate type (fixed or floating)
+        sourceColumn: rate_type
+        sourceTable: loan_master
+      spread:
+        type: STRING
+        description: Interest rate spread over benchmark
+        sourceColumn: spread
+        sourceTable: loan_master
+      emi_amount:
+        type: STRING
+        description: Equated Monthly Installment amount
+        sourceColumn: emi_amount
+        sourceTable: loan_master
+      tenor:
+        type: STRING
+        description: Loan tenure in months
+        sourceColumn: tenor
+        sourceTable: loan_master
+      start_date:
+        type: DATETIME
+        description: Loan start date
+        sourceColumn: start_date
+        sourceTable: loan_master
+      maturity_date:
+        type: DATETIME
+        description: Loan maturity date
+        sourceColumn: maturity_date
+        sourceTable: loan_master
+      status:
+        type: STRING
+        description: Current loan status
+        sourceColumn: status
+        sourceTable: loan_master
+  stateStoreType: loadDataIceberg
+  isProfilingEnabled: false
+  updateStrategy: Overwrite
+  tableName: iceberg_meta.secured_loan
+  warehousePath: s3a://dataverse/testbed_load/
+  catalogName: postgres_catalog
+  optional:
+    persistDataFrame: false
+    enableDataReconciliation: false
+    enforceSchema: false
+    enforceSchemaMethod: Warning
+    catalogType: postgres
+  refreshInterval: 30 5 * * *
+transformation:
+  - isDynamic: true
+    alias: Transform
+    description: Transforming secured loan data
+    sequence: 3
+    inputDataFrameList:
+      - inputDataFrame: Party_Master_1
+        tempViewName: PM
+      - inputDataFrame: Loan_Master_1
+        tempViewName: LM
+    query: select * from PM
+    optional:
+      persistDataFrame: false
+    type: operationThroughSqlQuery
+controlPort:
+  dataQualityRules: {}
