@@ -1,0 +1,118 @@
+jobId: "992"
+jobName: Corporate Loans
+jobType: Source Aligned Data Product
+developerId: 42825798-b98f-41c3-954a-c0722b747faf
+domain: financial_services
+alias: loading_Corporate_Loans_data_in_iceberg
+discoveryPort:
+  name: Corporate Loans
+inputPorts:
+  - alias: Loan_Master_1
+    isDynamic: true
+    path: s3://dataverse/testbed/banking/loan_master.csv
+    optional:
+      persistDataFrame: false
+      advanceOptions:
+        delimiter: ","
+      enableDataReconciliation: false
+      enforceSchema: false
+      connection: S3 Connection - Financial Services
+      dataSetUrn: urn:dv:dataset:d300f506-c956-4763-aabb-8dd8b1d706fe
+    type: inputDelimited
+  - alias: Collateral__Details_1
+    isDynamic: true
+    path: s3://dataverse/testbed/banking/collateral_details.csv
+    optional:
+      persistDataFrame: false
+      advanceOptions:
+        delimiter: ","
+      enableDataReconciliation: false
+      enforceSchema: false
+      connection: S3 Connection - Financial Services
+      dataSetUrn: urn:dv:dataset:5d6521f9-0c61-47df-aac6-1108122b2ee4
+    type: inputDelimited
+productState:
+  isDynamic: true
+  alias: loading_Corporate_Loans_data_in_iceberg
+  retentionVersions: ""
+  logicalSchema:
+    properties:
+      loan_id:
+        type: STRING
+        description: Unique identifier of the loan
+        sourceColumn: loan_id
+        sourceTable: loan_master
+      loan_type:
+        type: STRING
+        description: Type of loan
+        sourceColumn: loan_type
+        sourceTable: loan_master
+      principal_amount:
+        type: STRING
+        description: Loan principal amount
+        sourceColumn: principal_amount
+        sourceTable: loan_master
+      interest_rate:
+        type: STRING
+        description: Interest rate applicable on the loan
+        sourceColumn: interest_rate
+        sourceTable: loan_master
+      start_date:
+        type: DATETIME
+        description: Loan start date
+        sourceColumn: start_date
+        sourceTable: loan_master
+      maturity_date:
+        type: DATETIME
+        description: Loan maturity date
+        sourceColumn: maturity_date
+        sourceTable: loan_master
+      collateral_id:
+        type: STRING
+        description: Unique identifier for collateral
+        sourceColumn: collateral_id
+        sourceTable: collateral_details
+      collateral_type:
+        type: STRING
+        description: Type of collateral
+        sourceColumn: collateral_type
+        sourceTable: collateral_details
+      market_value:
+        type: STRING
+        description: Market value of the collateral
+        sourceColumn: market_value
+        sourceTable: collateral_details
+      status:
+        type: STRING
+        description: Current status of the collateral
+        sourceColumn: status
+        sourceTable: collateral_details
+  stateStoreType: loadDataIceberg
+  isProfilingEnabled: false
+  updateStrategy: Overwrite
+  tableName: iceberg_meta.corporate_loans
+  warehousePath: s3a://dataverse/testbed_load/
+  catalogName: postgres_catalog
+  optional:
+    persistDataFrame: false
+    enableDataReconciliation: false
+    enforceSchema: false
+    enforceSchemaMethod: Warning
+    catalogType: postgres
+  refreshInterval: 30 5 * * *
+transformation:
+  - isDynamic: true
+    alias: Transform
+    description: Transforming corporate loan data
+    sequence: 3
+    inputDataFrameList:
+      - inputDataFrame: Loan_Master_1
+        tempViewName: LM
+      - inputDataFrame: Collateral__Details_1
+        tempViewName: CD
+    query: select * from CD
+    optional:
+      persistDataFrame: false
+    type: operationThroughSqlQuery
+controlPort:
+  dataQualityRules: {}
