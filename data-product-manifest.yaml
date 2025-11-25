@@ -9,7 +9,7 @@ discoveryPort:
 inputPorts:
   - alias: Party_Master_1
     isDynamic: true
-    path: s3://dataverse/testbed/banking/secured_loans.csv
+    path: s3a://dataverse/testbed/banking/secured_loans.csv
     optional:
       persistDataFrame: false
       advanceOptions:
@@ -21,7 +21,7 @@ inputPorts:
     type: inputDelimited
   - alias: Loan_Master_1
     isDynamic: true
-    path: s3://dataverse/testbed/banking/loan_master.csv
+    path: s3a://dataverse/testbed/banking/loan_master.csv
     optional:
       persistDataFrame: false
       advanceOptions:
@@ -124,6 +124,7 @@ productState:
     enforceSchema: false
     enforceSchemaMethod: Warning
     catalogType: postgres
+    connection: S3 Connection - Financial Services
   refreshInterval: 30 5 * * *
 transformation:
   - isDynamic: true
