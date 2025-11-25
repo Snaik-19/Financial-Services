@@ -9,7 +9,7 @@ discoveryPort:
 inputPorts:
   - alias: Credit_Score_1
     isDynamic: true
-    path: s3://dataverse/testbed/banking/credit_scores.csv
+    path: s3a://dataverse/testbed/banking/credit_scores.csv
     optional:
       persistDataFrame: false
       advanceOptions:
@@ -21,7 +21,7 @@ inputPorts:
     type: inputDelimited
   - alias: Bureau_Enquiry_1
     isDynamic: true
-    path: s3://dataverse/testbed/banking/credit_risk_analysis.csv
+    path: s3a://dataverse/testbed/banking/credit_risk_analysis.csv
     optional:
       persistDataFrame: false
       advanceOptions:
@@ -171,7 +171,7 @@ productState:
   optional:
     persistDataFrame: false
     enableDataReconciliation: false
-    enforceSchema: true
+    enforceSchema: false
     enforceSchemaMethod: Warning
     catalogType: postgres
   refreshInterval: 30 5 * * *
