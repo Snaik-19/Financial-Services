@@ -9,7 +9,7 @@ discoveryPort:
 inputPorts:
   - alias: Internet_Transactions_1
     isDynamic: true
-    path: s3://dataverse/testbed/banking/internet_transactions.csv
+    path: s3a://dataverse/testbed/banking/internet_transactions.csv
     optional:
       persistDataFrame: false
       advanceOptions:
@@ -21,7 +21,7 @@ inputPorts:
     type: inputDelimited
   - alias: Core_Banking_System_Details_1
     isDynamic: true
-    path: s3://dataverse/testbed/banking/core_banking_system_details.csv
+    path: s3a://dataverse/testbed/banking/core_banking_system_details.csv
     optional:
       persistDataFrame: false
       advanceOptions:
@@ -33,7 +33,7 @@ inputPorts:
     type: inputDelimited
   - alias: Disbursment_Details_1
     isDynamic: true
-    path: s3://dataverse/testbed/banking/transaction_master.csv
+    path: s3a://dataverse/testbed/banking/transaction_master.csv
     optional:
       persistDataFrame: false
       advanceOptions:
@@ -153,9 +153,10 @@ productState:
   optional:
     persistDataFrame: false
     enableDataReconciliation: false
-    enforceSchema: true
+    enforceSchema: false
     enforceSchemaMethod: Warning
     catalogType: postgres
+    connection: S3 Connection - Financial Services
   refreshInterval: 30 5 * * *
 transformation:
   - isDynamic: true
