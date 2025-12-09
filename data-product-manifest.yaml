@@ -204,4 +204,14 @@ transformation:
         showData: true
     type: operationThroughSqlQuery
 controlPort:
-  dataQualityRules: {}
+  dataQualityRules:
+    NullValueCheck:
+      productState:
+        checks:
+          - column: loan_id
+        referenceAlias: loading_unsecured_loan_data_in_iceberg
+    UniquenessCheck:
+      productState:
+        checks:
+          - column: loan_id
+        referenceAlias: loading_unsecured_loan_data_in_iceberg
