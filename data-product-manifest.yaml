@@ -1,11 +1,11 @@
 jobId: "991"
-jobName: Credit Risk Assesment
+jobName: Credit Risk Assesments
 jobType: Source Aligned Data Product
 developerId: 42825798-b98f-41c3-954a-c0722b747faf
 domain: financial_services
 alias: loading_Credit_Risk_Assesment_data_in_iceberg
 discoveryPort:
-  name: Credit Risk Assesment
+  name: Credit Risk Assesments
 inputPorts:
   - alias: Credit_Score_1
     isDynamic: true
@@ -174,6 +174,11 @@ productState:
     enforceSchema: false
     enforceSchemaMethod: Warning
     catalogType: postgres
+    connection: S3 Connection
+    loggingOptions:
+      printSchema: true
+      count: true
+      showData: true
   refreshInterval: 30 5 * * *
 transformation:
   - isDynamic: true
