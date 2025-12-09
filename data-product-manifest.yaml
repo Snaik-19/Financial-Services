@@ -73,12 +73,12 @@ productState:
         sourceColumn: model_version
         sourceTable: credit_score
       score_date:
-        type: DATETIME
+        type: STRING
         description: Date when the score was generated
         sourceColumn: score_date
         sourceTable: credit_score
       score_valid_till:
-        type: DATETIME
+        type: STRING
         description: Validity end date of the credit score
         sourceColumn: score_valid_till
         sourceTable: credit_score
@@ -98,7 +98,7 @@ productState:
         sourceColumn: bureau_name
         sourceTable: bureau_enquiry
       enquiry_date:
-        type: DATETIME
+        type: STRING
         description: Date when the bureau enquiry was made
         sourceColumn: enquiry_date
         sourceTable: bureau_enquiry
@@ -122,10 +122,10 @@ productState:
         description: Result of the bureau enquiry
         sourceColumn: enquiry_result
         sourceTable: bureau_enquiry
-      bureau_reference_decimal(35,10):
+      bureau_reference_string:
         type: STRING
-        description: Reference decimal(35,10) provided by the bureau
-        sourceColumn: bureau_reference_decimal(35,10)
+        description: Reference datetime provided by the bureau
+        sourceColumn: bureau_reference_string
         sourceTable: bureau_enquiry
       report_id:
         type: STRING
@@ -133,7 +133,7 @@ productState:
         sourceColumn: report_id
         sourceTable: bureau_enquiry
       report_date:
-        type: DATETIME
+        type: STRING
         description: Date when the credit report was generated
         sourceColumn: report_date
         sourceTable: bureau_enquiry
@@ -144,7 +144,7 @@ productState:
         sourceTable: bureau_enquiry
       total_accounts_reported:
         type: STRING
-        description: Total decimal(35,10) of accounts reported by bureau
+        description: Total string of accounts reported by bureau
         sourceColumn: total_accounts_reported
         sourceTable: bureau_enquiry
       total_enquiries_12m:
@@ -195,4 +195,16 @@ transformation:
       persistDataFrame: false
     type: operationThroughSqlQuery
 controlPort:
-  dataQualityRules: {}
+  dataQualityRules:
+    NullValueCheck:
+      productState:
+        checks:
+          - column: customer_id
+          - column: score_id
+        referenceAlias: loading_Credit_Risk_Assesment_data_in_iceberg
+    UniquenessCheck:
+      productState:
+        checks:
+          - column: customer_id
+          - column: score_id
+        referenceAlias: loading_Credit_Risk_Assesment_data_in_iceberg
