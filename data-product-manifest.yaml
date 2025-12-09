@@ -70,7 +70,7 @@ productState:
         sourceColumn: currency
         sourceTable: internet_transactions
       timestamp:
-        type: DATETIME
+        type: STRING
         description: Transaction timestamp
         sourceColumn: timestamp
         sourceTable: internet_transactions
@@ -94,13 +94,13 @@ productState:
         description: Code of the banking product
         sourceColumn: product_code
         sourceTable: core_banking_system_details
-      account_decimal(35,10):
+      account_string:
         type: STRING
-        description: Bank account decimal(35,10)
-        sourceColumn: account_decimal(35,10)
+        description: Bank account string
+        sourceColumn: account_string
         sourceTable: core_banking_system_details
       opened_date:
-        type: DATETIME
+        type: STRING
         description: Date when the account was opened
         sourceColumn: opened_date
         sourceTable: core_banking_system_details
@@ -135,7 +135,7 @@ productState:
         sourceColumn: loan_id
         sourceTable: disbursement_details
       disbursement_date:
-        type: DATETIME
+        type: STRING
         description: Date when the disbursement was made
         sourceColumn: disbursement_date
         sourceTable: disbursement_details
@@ -153,7 +153,7 @@ productState:
   optional:
     persistDataFrame: false
     enableDataReconciliation: false
-    enforceSchema: false
+    enforceSchema: true
     enforceSchemaMethod: Warning
     catalogType: postgres
     connection: S3 Connection
@@ -177,6 +177,20 @@ transformation:
     query: select * from DD
     optional:
       persistDataFrame: false
+      loggingOptions:
+        printSchema: true
+        count: true
+        showData: true
     type: operationThroughSqlQuery
 controlPort:
-  dataQualityRules: {}
+  dataQualityRules:
+    NullValueCheck:
+      productState:
+        checks:
+          - column: txn_id
+        referenceAlias: loading_transaction_master_data_in_iceberg
+    UniquenessCheck:
+      productState:
+        checks:
+          - column: txn_id
+        referenceAlias: loading_transaction_master_data_in_iceberg
