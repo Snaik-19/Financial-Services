@@ -98,12 +98,12 @@ productState:
         sourceColumn: tenor
         sourceTable: loan_master
       start_date:
-        type: DATETIME
+        type: STRING
         description: Loan start date
         sourceColumn: start_date
         sourceTable: loan_master
       maturity_date:
-        type: DATETIME
+        type: STRING
         description: Loan maturity date
         sourceColumn: maturity_date
         sourceTable: loan_master
@@ -121,7 +121,7 @@ productState:
   optional:
     persistDataFrame: false
     enableDataReconciliation: false
-    enforceSchema: false
+    enforceSchema: true
     enforceSchemaMethod: Warning
     catalogType: postgres
     connection: S3 Connection
@@ -145,4 +145,14 @@ transformation:
       persistDataFrame: false
     type: operationThroughSqlQuery
 controlPort:
-  dataQualityRules: {}
+  dataQualityRules:
+    NullValueCheck:
+      productState:
+        checks:
+          - column: customer_id
+        referenceAlias: loading_secured_loan_data_in_iceberg
+    UniquenessCheck:
+      productState:
+        checks:
+          - column: customer_id
+        referenceAlias: loading_secured_loan_data_in_iceberg
