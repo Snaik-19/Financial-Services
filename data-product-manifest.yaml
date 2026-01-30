@@ -113,7 +113,7 @@ productState:
         sourceColumn: status
         sourceTable: loan_master
   stateStoreType: loadDataIceberg
-  isProfilingEnabled: false
+  isProfilingEnabled: true
   updateStrategy: Overwrite
   tableName: iceberg_meta.secured_loan
   warehousePath: s3a://dataverse/testbed_load/
