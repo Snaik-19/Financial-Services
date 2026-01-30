@@ -170,7 +170,7 @@ productState:
         sourceColumn: foreclosure_charges
         sourceTable: loan_fees
   stateStoreType: loadDataIceberg
-  isProfilingEnabled: false
+  isProfilingEnabled: true
   updateStrategy: Overwrite
   tableName: iceberg_meta.unsecured_loans
   warehousePath: s3a://dataverse/testbed_load/
