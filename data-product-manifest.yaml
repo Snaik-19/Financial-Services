@@ -145,7 +145,7 @@ productState:
         sourceColumn: payment_method
         sourceTable: disbursement_details
   stateStoreType: loadDataIceberg
-  isProfilingEnabled: false
+  isProfilingEnabled: true
   updateStrategy: Overwrite
   tableName: iceberg_meta.transaction_master
   warehousePath: s3a://dataverse/testbed_load/
