@@ -1,7 +1,7 @@
 jobId: "1052"
 jobName: Risk 360
 jobType: Aggregated Data Product
-developerId: 42825798-b98f-41c3-954a-c0722b747faf
+developerId: 2161a325-4de5-43e9-839a-8ee5c52cb81e
 domain: financial_services
 alias: loading_Risk360_data_in_iceberg
 discoveryPort:
@@ -260,6 +260,21 @@ productState:
         type: STRING
         description: Capital adequacy ratio derived from Tier-1 and risk-weighted assets
         sourceColumn: capital_adeq_ratio
+        sourceTable: Calculated_Column
+      npl_ratio:
+        type: STRING
+        description: NPL ratio derived from Non-Performing Loans and Total Gross Loans
+        sourceColumn: npl_ratio
+        sourceTable: Calculated_Column
+      ecl_ratio:
+        type: STRING
+        description: ECL ratio derived from Loan Loss Provisions and Non-Performing Loans
+        sourceColumn: ecl_ratio
+        sourceTable: Calculated_Column
+      ldr:
+        type: STRING
+        description: LDR derived from Net Loans and Total Deposits
+        sourceColumn: ldr
         sourceTable: Calculated_Column
   stateStoreType: loadDataIceberg
   isProfilingEnabled: true
